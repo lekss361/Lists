@@ -256,18 +256,38 @@ namespace List
             return count;
         }
 
-        public void AddArrayInEnd(int [] insertArray)
+        public void AddArrayListInEnd(ArrayList insertArray /*int indexOfInsert = Length;*/)
         {
-            UpSize(insertArray.Length);
-
-            for (int i = Length-1; i < Length-1+ insertArray.Length; i++)
+            for(int i = 0; i<insertArray.Length; i++)
             {
-                _array[i] = insertArray[i - Length - 1 ];
-              
+                Add(insertArray[i]);
             }
-            Length+=insertArray.Length;
 
         }
+        public void AddArrrayListAtIndex( int index, ArrayList insertArray)
+        {
+            //for (int i = 0; i < insertArray.Length; i++)
+            //{
+            //    AddByIndex(index+i, insertArray[i]);
+            //}
+            int oldLength = Length;
+            UpSize(insertArray.Length);
+
+            Length += insertArray.Length;
+
+
+            for (int i = oldLength; i >= index; i--)
+            {
+                _array[i + insertArray.Length] = _array[i];
+            }
+
+            for (int i = 0; i<insertArray.Length; i++)
+            {
+                _array[i + index] = insertArray[i];
+            }
+        
+        }
+
 
 
 
@@ -303,15 +323,15 @@ namespace List
     {
 
       for (int i = Length; i > index; i--)
-      {
+       {
         _array[i] = _array[i - step];
       }
     }
-    private void ShiftToLeft(int index = 0)
+    private void ShiftToLeft(int index = 0 , int step =1)
     {
       for (int i = index; i < Length - 1; i++)
       {
-        _array[i] = _array[i + 1];
+        _array[i] = _array[i + step];
 
       }
       _array[Length - 1] = 0;

@@ -173,13 +173,28 @@ namespace List.Tests
 
         }
 
-        [TestCase( new int[] { 3, 4, 6, 4, 2, 5, 4 }, new int[] { 3, 6, 2, 5 }, new int[] { 3, 4, 6, 4, 2, 5, 4, 3, 6, 2, 5 })]
-        public void AddArrayInEndTest(int[] insertArray , int[] array,  int[] expectedArray)
+        [TestCase( new int[] { 1,2,3,4 }, new int[] { 5,6,7,8,9,10 }, new int[] { 1,2,3,4,5,6,7,8,9,10 })] // что тут должно быт на первом месте, тот массив в который мы вставляем или тот, который передаем?
+        public void AddArrayListInEndTest( int[] array, int[] insertArray, int[] expectedArray)
         {
             ArrayList actual = new ArrayList(array);
             ArrayList expected = new ArrayList(expectedArray);
+            ArrayList insert = new ArrayList(insertArray);
 
-            actual.AddArrayInEnd(insertArray);
+            actual.AddArrayListInEnd(insert);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(2, new int[] { 1, 2, 3, 4 }, new int[] { 5, 6, 7, 8, 9, 10 }, new int[] { 1, 2, 5, 6, 7, 8, 9, 10, 3 , 4 })]
+        [TestCase(3, new int[] { 1, 2, 3, 4 }, new int[] { 5, 6, 7, 8, 9, 10 }, new int[] { 1, 2, 3, 5, 6, 7, 8, 9, 10, 4 })]
+        [TestCase(3, new int[] { 1, 2, 3, 4, 5, 6,  }, new int[] { 9,9,9 }, new int[] { 1, 2, 3, 9,9,9, 4, 5, 6,  })]
+        public void AddArrrayListAtIndexTest(int index, int[] array , int[] insertArray, int[] expectedArray)
+        {
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+            ArrayList insert = new ArrayList(insertArray);
+
+             actual.AddArrrayListAtIndex(index, insert);
 
             Assert.AreEqual(expected, actual);
         }
