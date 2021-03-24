@@ -56,6 +56,34 @@ namespace List
                 _array[index] = value;
             }
         } // 11 Индексатор
+        public override string ToString()
+        {
+            string s = "";
+            for (int i = 0; i < Length; i++)
+            {
+                s += _array[i] + " ";
+            }
+            return s;
+
+        }
+
+        public override bool Equals(object obj)
+        {
+            ArrayList arrayList = (ArrayList)obj;
+
+            if (Length != arrayList.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < Length; i++)
+            {
+                if (_array[i] != arrayList[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         public void Add(int value)
         {
@@ -231,7 +259,6 @@ namespace List
                 }
             }
         } //19
-        
 
         public void SortDescending()
         {
@@ -253,33 +280,12 @@ namespace List
 
         public int RemoveByValueFisrt(int value)
         {
-            int index;
-
-            for (int i = 0; i < Length; i++)
-            {
-                if (value == _array[i])
-                {
-                    index = i;
-                    ShiftToLeft(i);
-                    Length--;
-                    return index;
-                }
-            }
-
-            return -1;
+           return RemoveByValue(value);      
         } //21
 
         public int RemoveByValueAll(int value)
         {
-            int count = 0;
-
-            while (RemoveByValueFisrt(value) != -1)
-            {
-                count++;
-
-            }
-
-            return count;
+            return RemoveByValue(value, 1);
         } //22
 
         public void AddArrayListInEnd(ArrayList insertArray)
@@ -312,10 +318,6 @@ namespace List
             }
 
         } //26
-
-
-
-
 
         private void UpSize(int value = 1)
         {
@@ -369,33 +371,36 @@ namespace List
             _array = tmpArray;
         }
 
-        public override string ToString()
+        private int RemoveByValue(int value, int usl = 0)
         {
-            string s = "";
+            int index = -1;
+            int count = 0;
+
             for (int i = 0; i < Length; i++)
             {
-                s += _array[i] + " ";
-            }
-            return s;
-
-        }
-
-        public override bool Equals(object obj)
-        {
-            ArrayList arrayList = (ArrayList)obj;
-
-            if (Length != arrayList.Length)
-            {
-                return false;
-            }
-            for (int i = 0; i < Length; i++)
-            {
-                if (_array[i] != arrayList[i])
+                if (value == _array[i])
                 {
-                    return false;
+                    index = i;
+                    ShiftToLeft(i);
+                    Length--;
+                    i--;
+                    count++;
+
+                    if (usl == 0)
+                    {
+                        break;
+                    }
                 }
             }
-            return true;
+
+            if (usl == 0)
+            {
+                return index;
+            }
+            else
+            {
+                return count;
+            }
         }
     }
 }
