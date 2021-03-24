@@ -96,7 +96,7 @@ namespace List.Tests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(2, 2, new int[] { 1, 2, 3, 4 }, new int[] { 1, 2 })]
+        [TestCase(4, 3, new int[] { 1, 2, 3, 4,5,6,7,8,9 }, new int[] { 1, 2, 3, 4, 8, 9 })]
         public void ClearByIndexXElements(int x, int startPoint, int[] array, int[] expectedArray)
         {
             LinkedList actual = new LinkedList(array);

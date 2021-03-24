@@ -195,7 +195,7 @@ namespace List
                 _tail = tmpNodeFirst;
             }
 
-            Length -= x;
+            Length -= x-1;
         }
         public override string ToString()
         {
