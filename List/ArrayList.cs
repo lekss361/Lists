@@ -1,152 +1,174 @@
 ﻿using System;
 namespace List
 {
-  public class ArrayList
-  {
-    public int Length { get; private set; }
-    public int Capacity => _array.Length; 
-    private int[] _array;
-
-    public ArrayList()
+    public class ArrayList
     {
-      Length = 0; // почему это называется длинной, если длину при иницилизации мы сами ниже задали 
+        public int Length { get; private set; }
+
+        public int Capacity => _array.Length;
+
+        private int[] _array;
+
+        public ArrayList()
+        {
+            Length = 0; 
             _array = new int[10];
-    }
-    public ArrayList(int value)
-    {
-        Length = 1;
-        _array = new int[10];
-        _array[0] = value;
-    }
+        } //23.1
 
-    public ArrayList(int[] vs)
-    {
-      _array = new int[vs.Length];
-     for(int i =0; i < _array.Length; i++)
-      {
-        _array[i] = vs[i];
-      }
-      
-      Length = vs.Length;
-      
-    }
-    public int this[int index]
-    {
-            
-      get
-      {
-                if(index> Length)
-                {
-                    throw new ArgumentOutOfRangeException("Индекс вне массива");
-                }
-        return _array[index];
-      }
-
-      set
-      {
-                if (index > Length && index < 0 )
-                {
-                    throw new ArgumentOutOfRangeException("Индекс вне массива");
-                }
-                
-                _array[index] = value;
-      }
-    }
-
-    public void Add(int value)
-    {
-      if (Length == _array.Length)
-      {
-        UpSize();
-      }
-      _array[Length] = value;
-      Length++;
-    }
-    public void RemoveByIndex(int index)
-    {
-      ShiftToLeft(index);
-      Length--;
-      DownSize();
-    }
-
-    public void AddByZeroIndex(int value)
-    {
-      AddByIndex(0, value);
-    }
-
-    public void AddByIndex(int index, int value)
-    {
-      
-      
-        UpSize();
-      
-
-      for(int i =0; i < Length; i++)
-      {
-        if (i == index)
+        public ArrayList(int value)
         {
-          ShiftToRight(index);
-          _array[index] = value;
-          Length++;
-        }
-      }
-    }
+            Length = 1;
+            _array = new int[10];
+            _array[0] = value;
+        } //23.2
 
-    public void ClearLastX( int startIndex)
-    {
-      for(int  i = startIndex; i > 0; i--)
-      {
-           RemoveByIndex(Length - 1);
-      }
-    }
-    public int arrayLength()
-    {
-        return Length;
-    }
-
-    public int FirstIndexByValue(int value)
-    { 
-        for (int i = 0; i < Length; i++)
+        public ArrayList(int[] array)
         {
-            if(_array[i] == value)
+            _array = new int[array.Length];
+            for (int i = 0; i < _array.Length; i++)
             {
-                return i;
-            } 
-        }
-        return  -1;
-    }
+                _array[i] = array[i];
+            }
 
-    public void ChangeValueByIndex(int index, int value)
+            Length = array.Length;
+
+        } //23.4
+
+        public int this[int index]
+        {
+
+            get
+            {
+                if (index > Length && index < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Индекс вне массива");
+                }
+                return _array[index];
+            }
+
+            set
+            {
+                if (index > Length && index < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Индекс вне массива");
+                }
+
+                _array[index] = value;
+            }
+        } // 11 Индексатор
+
+        public void Add(int value)
+        {
+          AddByIndex(Length, value);
+        } //1
+
+        public void AddByZeroIndex(int value)
+        {
+            AddByIndex(0, value);
+        } //2
+
+        public void AddByIndex(int index, int value)
+        {
+            UpSize();
+            Length++;
+
+            for (int i = 0; i < Length; i++)
+            {
+                if (i == index)
+                {
+                    ShiftToRight(index);
+                    _array[index] = value;
+                }
+            }
+        } //3
+
+        public void RemoveLastElement()
+        {
+            Length--;
+        } //4
+
+        public void RemoveFirstElement()
+        {
+            RemoveByIndex(0);
+        }  // 5
+
+        public void RemoveByIndex(int index) // 6
+        {
+            ShiftToLeft(index);
+            Length--;
+            DownSize();
+        }
+
+        public void RemoveXElementsByEnd(int x) //7
+        {
+            Length -= x;
+        }
+
+        public void RemoveXElementsByStart(int x) // 8
+        {
+            ClearByIndexXElements(x, 0);
+        }
+
+        public void ClearByIndexXElements(int x, int startPoint )
+        {
+            if (x + startPoint> Length  )
+            {
+                throw new ArgumentException("Переданное число больше длинны массива");
+            }
+            for (int i = x; i > 0; i--)
+            {
+                RemoveByIndex(startPoint );
+            }
+        }  // 9
+
+        public int arrayLength()
+        {
+            return Length;
+        } // 10
+
+        public int FirstIndexByValue(int value)
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                if (_array[i] == value)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        } //12
+
+        public void ChangeValueByIndex(int index, int value)
         {
             _array[index] = value;
-        }
+        }  //13
 
-    public void Reverse()
+        public void Reverse()
         {
-            
             int tmpValue = 0;
-                for (int i = 0; i < Length/2; i++)
-                {
+            for (int i = 0; i < Length / 2; i++)
+            {
                 tmpValue = _array[i];
-                _array[i] = _array[ Length-1 - i];
-                _array[ Length -1  - i] = tmpValue;
-                }
-            
-        }
+                _array[i] = _array[Length - 1 - i];
+                _array[Length - 1 - i] = tmpValue;
+            }
 
-    public int MaxValue()
+        } //14
+
+        public int MaxValue()
         {
             int maxValue = _array[0];
 
             for (int i = 0; i < Length; i++)
             {
-                if(_array[i] > maxValue)
+                if (_array[i] > maxValue)
                 {
                     maxValue = _array[i];
                 }
             }
             return maxValue;
-        }
+        } //15
+
         public int MinValue()
         {
             int minValue = _array[0];
@@ -160,12 +182,12 @@ namespace List
             }
 
             return minValue;
-        }
+        } //16
 
         public int IndexOfMaxValue()
         {
             int indexOfMaxValue = 0;
-           
+
             for (int i = 0; i < Length; i++)
             {
                 if (_array[i] > _array[indexOfMaxValue])
@@ -175,7 +197,8 @@ namespace List
             }
 
             return indexOfMaxValue;
-        }
+        } //17
+
         public int IndexOfMinValue()
         {
             int indexOfMinValue = 0;
@@ -189,8 +212,8 @@ namespace List
             }
 
             return indexOfMinValue;
-        }
-        
+        } //18
+
         public void SortAscending()
         {
             for (int i = 1; i < Length; i++)
@@ -207,7 +230,8 @@ namespace List
                     }
                 }
             }
-        }
+        } //19
+        
 
         public void SortDescending()
         {
@@ -225,14 +249,15 @@ namespace List
                     }
                 }
             }
-        }
+        } //20
+
         public int RemoveByValueFisrt(int value)
         {
             int index;
 
             for (int i = 0; i < Length; i++)
             {
-                if(value == _array[i])
+                if (value == _array[i])
                 {
                     index = i;
                     ShiftToLeft(i);
@@ -242,144 +267,135 @@ namespace List
             }
 
             return -1;
-        }
+        } //21
 
         public int RemoveByValueAll(int value)
         {
             int count = 0;
+
             while (RemoveByValueFisrt(value) != -1)
             {
                 count++;
 
             }
-            
+
             return count;
-        }
+        } //22
 
-        public void AddArrayListInEnd(ArrayList insertArray /*int indexOfInsert = Length;*/)
+        public void AddArrayListInEnd(ArrayList insertArray)
         {
-            for(int i = 0; i<insertArray.Length; i++)
-            {
-                Add(insertArray[i]);
-            }
+            AddArrayListByIndex(Length, insertArray);
 
-        }
-        public void AddArrrayListAtIndex( int index, ArrayList insertArray)
+        } // 24
+
+        public void AddArrayListByFirstIndex(ArrayList insertArray)
         {
-            //for (int i = 0; i < insertArray.Length; i++)
-            //{
-            //    AddByIndex(index+i, insertArray[i]);
-            //}
+            AddArrayListByIndex(0, insertArray);
+        } //25
+
+        public void AddArrayListByIndex(int index, ArrayList insertArray)
+        {
             int oldLength = Length;
+
             UpSize(insertArray.Length);
 
             Length += insertArray.Length;
-
 
             for (int i = oldLength; i >= index; i--)
             {
                 _array[i + insertArray.Length] = _array[i];
             }
 
-            for (int i = 0; i<insertArray.Length; i++)
+            for (int i = 0; i < insertArray.Length; i++)
             {
                 _array[i + index] = insertArray[i];
             }
-        
-        }
+
+        } //26
 
 
 
 
-        //private void UpSize()
-        //{
-        //    if (Length + 1 > _array.Length) 
-        //    {
-        //    int newLength = (int)(_array.Length * 1.33d + 1);
-        //    ChangeArraySize(newLength);
-        //    }
-        //}
+
         private void UpSize(int value = 1)
         {
             if (Length + value > _array.Length)
             {
-                
-                int newLength = (int)((_array.Length + value ) * 1.33d + 1);
-                //Length += value;//Вопрос к Стасу , нужно ли это тут 
+
+                int newLength = (int)((_array.Length + value) * 1.33d + 1);
+
                 ChangeArraySize(newLength);
             }
         }
 
         private void DownSize()
-    {
-      if (Length * 1.33 + 1 < _array.Length)
-      {
-        int newLength = (int)(_array.Length * 0.67d);
-
-        ChangeArraySize(newLength);
-      }
-    }
-    private void ShiftToRight(int index = 0, int step = 1)
-    {
-
-      for (int i = Length; i > index; i--)
-       {
-        _array[i] = _array[i - step];
-      }
-    }
-    private void ShiftToLeft(int index = 0 , int step =1)
-    {
-      for (int i = index; i < Length - 1; i++)
-      {
-        _array[i] = _array[i + step];
-
-      }
-      _array[Length - 1] = 0;
-    }
-
-    private void ChangeArraySize(int newLength)
-    {
-      int[] tmpArray = new int[newLength];
-
-      for (int i = 0; i < Length; i++)
-      {
-        tmpArray[i] = _array[i];
-      }
-
-      _array = tmpArray;
-    }
-
-    public override string ToString()
-    {
-      string s = "";
-      for (int i = 0; i < Length; i++)
-      {
-        s += _array[i] + " ";
-      }
-      return s;
-
-    }
-    public override bool Equals(object obj)
-    {
-      ArrayList arrayList = (ArrayList)obj;
-
-      if (Length != arrayList.Length)
-      {
-        return false;
-      }
-      for (int i = 0; i < Length; i++)
-      {
-        if (_array[i] != arrayList[i])
         {
-          return false;
+            if (Length * 1.33 + 1 < _array.Length)
+            {
+                int newLength = (int)(_array.Length * 0.67d);
+
+                ChangeArraySize(newLength);
+            }
         }
-      }
-      return true;
+
+        private void ShiftToRight(int index = 0, int step = 1)
+        {
+
+            for (int i = Length; i > index; i--)
+            {
+                _array[i] = _array[i - step];
+            }
+        }
+
+        private void ShiftToLeft(int index = 0, int step = 1)
+        {
+            for (int i = index; i < Length - 1; i++)
+            {
+                _array[i] = _array[i + step];
+
+            }
+            _array[Length - 1] = 0;
+        }
+
+        private void ChangeArraySize(int newLength)
+        {
+            int[] tmpArray = new int[newLength];
+
+            for (int i = 0; i < Length; i++)
+            {
+                tmpArray[i] = _array[i];
+            }
+
+            _array = tmpArray;
+        }
+
+        public override string ToString()
+        {
+            string s = "";
+            for (int i = 0; i < Length; i++)
+            {
+                s += _array[i] + " ";
+            }
+            return s;
+
+        }
+
+        public override bool Equals(object obj)
+        {
+            ArrayList arrayList = (ArrayList)obj;
+
+            if (Length != arrayList.Length)
+            {
+                return false;
+            }
+            for (int i = 0; i < Length; i++)
+            {
+                if (_array[i] != arrayList[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
-
-
-
-  }
-
-
 }

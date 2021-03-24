@@ -1,13 +1,23 @@
 using NUnit.Framework;
+using System;
 
 namespace List.Tests
 {
     public class ArrayListTests
     {
+        [TestCase(5, new int[] { 1, 2, 3, 4 }, new int[] { 1, 2, 3, 4, 5 })]
+        public void AddTest(int value, int[] array, int[] expectedArray)
+        {
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
+            actual.Add(value);
+
+            Assert.AreEqual(expected, actual);
+        }
 
         [TestCase(new int[] { 1, 2, 3 }, 2, new int[] { 2, 1, 2, 3 })]
-
-        public void AddInZeroIndexTest(int[] actualAr, int value, int[] arExpected)
+        public void AddByZeroIndexTest(int[] actualAr, int value, int[] arExpected)
         {
             ArrayList actual = new ArrayList(actualAr);
             ArrayList expected = new ArrayList(arExpected);
@@ -17,64 +27,96 @@ namespace List.Tests
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(3, 5)]
-        public void AddByIndexTest(int index, int value)
+        [TestCase(3, 5, new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 2, 3, 5, 4, 5 })]
+        public void AddByIndexTest(int index, int value ,int[] array ,int[] expectedArray)
         {
-            ArrayList actual = new ArrayList(new int[] { 1, 2, 3, 4, 5 });
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
             actual.AddByIndex(index, value);
-            ArrayList expected = new ArrayList(new int[] { 1, 2, 3, 5, 4, 5 });
+
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase(2)]
-        public void RemoveByIndexTest(int index)
+        [TestCase(new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 2, 3, 4 })]
+        public void RemoveLastElementTest(int[] array, int[] expectedArray)
         {
-            ArrayList actual = new ArrayList(new int[] { 1, 2, 3, 4, 5 });
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
+            actual.RemoveLastElement();
+
+            Assert.AreEqual(expected, actual);
+
+        }
+
+        [TestCase(new int[] { 1, 2, 3, 4, 5 }, new int[] { 2, 3, 4, 5 })]
+        public void RemoveFirstElementTest(int[] array, int[] expectedArray)
+        {
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
+            actual.RemoveFirstElement();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(2 , new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 2, 4, 5 })]
+        public void RemoveByIndexTest(int index , int [] array , int[] expectedArray)
+        {
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
             actual.RemoveByIndex(index);
-            ArrayList expected = new ArrayList(new int[] { 1, 2, 4, 5 });
+
             Assert.AreEqual(expected, actual);
         }
 
-        //[TestCase]
-        //public void DownSizeTest()
-        //{
-        //  ArrayList actual = new ArrayList(new int[] { 1, 2, 3 });
-
-        //  actual.Add(3);
-        //  actual.Add(4);
-
-        //  actual.Add(5);
-
-        //  actual.Add(6);
-
-        //  actual.RemoveByIndex(0);
-        //  actual.RemoveByIndex(0);
-        //  actual.RemoveByIndex(0);
-        //  actual.RemoveByIndex(0);
-
-        //  actual.DownSize();
-
-        //  Assert.AreEqual(actual.Capacity, 4);
-        //}
-
-        [TestCase(3)]
-        public void ClearLastXTest(int startIndex)
+        [TestCase(2, 1 , new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 4, 5 })]
+        public void ClearByIndexXElements(int x, int startPoint,int[] array,int[]expectedArray)
         {
-            ArrayList actual = new ArrayList(new int[] { 1, 2, 3, 4, 5 });
-            actual.ClearLastX(startIndex);
-            ArrayList expected = new ArrayList(new int[] { 1, 2, });
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
+            actual.ClearByIndexXElements(x,startPoint);
+
             Assert.AreEqual(expected, actual);
         }
-        [TestCase(6, 2)]
-        [TestCase(4, 1)]
-        [TestCase(5, 4)]
-        public void FirstIndexByValueTest(int key, int expected)
+
+
+        [TestCase(2, new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 2, 3 })]
+        public void RemoveXElementsByEndTest(int x, int[] array, int[] expectedArray)
         {
-            ArrayList ar = new ArrayList(new int[] { 1, 4, 6, 2, 5, 4 });
-            int actual = ar.FirstIndexByValue(key);
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
+            actual.RemoveXElementsByEnd(x);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(2, new int[] { 1, 2, 3, 4, 5 }, new int[] { 3, 4, 5 })]
+        public void RemoveXElementsByStartTest(int x, int[] array, int[] expectedArray)
+        {
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+
+            actual.RemoveXElementsByStart(x);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(6 ,new int[] { 1, 4, 6, 2, 5, 4 }, 2)]
+        [TestCase(4, new int[] { 1, 4, 6, 2, 5, 4 }, 1)]
+        public void FirstIndexByValueTest(int value, int[] array, int expected)
+        {
+            ArrayList ar = new ArrayList(array);
+            int actual = ar.FirstIndexByValue(value);
+
             Assert.AreEqual(expected, actual);
 
         }
+
         [TestCase(new int[] { 1, 4, 6, 2, 5, 4 }, new int[] { 4, 5, 2, 6, 4, 1 })]
         [TestCase(new int[] { 1, 2, 3, 4, 5 }, new int[] { 5, 4, 3, 2, 1 })]
         public void ReverseTest(int[] array, int[] expectedAr)
@@ -149,6 +191,7 @@ namespace List.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
         [TestCase(4, new int[] { 3, 4, 6, 2, 5, 4 }, new int[] { 3, 6, 2, 5, 4 })]
         public void RemoveByValueFisrtTest(int value, int[] array, int[] expectedArray)
         {
@@ -188,17 +231,45 @@ namespace List.Tests
         [TestCase(2, new int[] { 1, 2, 3, 4 }, new int[] { 5, 6, 7, 8, 9, 10 }, new int[] { 1, 2, 5, 6, 7, 8, 9, 10, 3 , 4 })]
         [TestCase(3, new int[] { 1, 2, 3, 4 }, new int[] { 5, 6, 7, 8, 9, 10 }, new int[] { 1, 2, 3, 5, 6, 7, 8, 9, 10, 4 })]
         [TestCase(3, new int[] { 1, 2, 3, 4, 5, 6,  }, new int[] { 9,9,9 }, new int[] { 1, 2, 3, 9,9,9, 4, 5, 6,  })]
-        public void AddArrrayListAtIndexTest(int index, int[] array , int[] insertArray, int[] expectedArray)
+        public void AddArrayListByIndexTest(int index, int[] array , int[] insertArray, int[] expectedArray)
         {
             ArrayList actual = new ArrayList(array);
             ArrayList expected = new ArrayList(expectedArray);
             ArrayList insert = new ArrayList(insertArray);
 
-             actual.AddArrrayListAtIndex(index, insert);
+            actual.AddArrayListByIndex(index, insert);
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestCase(new int[] { 5,6,7,8}, new int[] {1,2,3,4}, new int[] { 1,2,3,4,5,6,7,8})]
+
+        public void AddArrayListByZeroIndexTest(int[] array, int[] insertArray, int[] expectedArray)
+        {
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
+            ArrayList insert = new ArrayList(insertArray);
+
+            actual.AddArrayListByFirstIndex(insert);
 
             Assert.AreEqual(expected, actual);
         }
 
+        [TestCase(3,new int[] {1,2,3,4,5,6,7,8}, new int[] { 4, 5, 6, 7, 8 })]
+        public void RemoveXElementsByStart(int x ,  int[] array , int[] expectedArray)
+        {
+            ArrayList actual = new ArrayList(array);
+            ArrayList expected = new ArrayList(expectedArray);
 
+            actual.RemoveXElementsByStart(x);
+
+            Assert.AreEqual(expected, actual);
+        }
+        [TestCase(6,6 , new int[] { 1, 2, 3, 4, 5, 6, 7, 8 })]
+        public void ClearByIndexXElements_argumentNumberMoreArrayLength_throwException(int x, int startPoint, int[] array)
+        {
+            ArrayList actual = new ArrayList(array);
+
+            Assert.Throws<ArgumentException>(() => actual.ClearByIndexXElements(x, startPoint));
+        }
     }
 } 
