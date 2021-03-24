@@ -4,20 +4,21 @@ using System.Text;
 
 namespace List
 {
-    public class Node
-    {
-        public int Value { get; set; }
-        public Node Next { get; set; }
-
-        public Node(int value)
-        {
-            Value = value;
-            Next = null;
-        }
-    }
-
     public class LinkedList
     {
+        public class Node
+        {
+            public int Value { get; set; }
+            public Node Next { get; set; }
+
+            public Node(int value)
+            {
+                Value = value;
+                Next = null;
+            }
+
+        }
+
         public int Length { get; private set; }
         public int this[int index]
         {
@@ -95,124 +96,106 @@ namespace List
 
         public void AddByZeroIndex(int value)
         {
-
+            Node tmpNode = _root;
+            _root = new Node(value);
+            _root.Next = tmpNode;
+            Length++;
         }
-
         public void AddByIndex(int index, int value)
         {
-
+            Node tmpNode = _root;
+            for (int i = 0; i < index; i++)
+            {
+                tmpNode = tmpNode.Next;
+            }
+            Node AdNode = tmpNode;
+            tmpNode.Next = AdNode;
+            tmpNode = new Node(value);
         }
 
         public void RemoveLastElement()
         {
+            Node tmpNode = _root;
+            for (int i = 0; i < Length-2; i++)
+            {
+                tmpNode = tmpNode.Next;
+            }
+            tmpNode.Next = null;
+            _tail.Next = tmpNode;
 
+            Length--;
         }
-        public void RemoveFirstElement()
+        public void RemoveFirst()
         {
             _root = _root.Next;
         }
+
         public void RemoveByIndex(int index)
         {
-            Node current = _root;
+            Node tmpAarray = _root;
 
             for (int i = 1; i < index; i++)
             {
-                current = current.Next;
+                tmpAarray = tmpAarray.Next;
             }
 
-            current.Next = current.Next.Next;
+            tmpAarray.Next = tmpAarray.Next.Next;
 
             Length--;
         }
 
         public void RemoveXElementsByEnd(int x)
         {
+            Node tmpArray = _root;
+            for (int i = 0; i < Length-x-1; i++)
+            {
+                tmpArray = tmpArray.Next;
+            }
+            _tail.Next = tmpArray;
+            tmpArray.Next = null;
 
+            Length -= x;
         }
 
         public void RemoveXElementsByStart(int x)
         {
+            Node tmpArray = _root;
+            for (int i = 0; i < x; i++)
+            {
+                tmpArray = tmpArray.Next;
+            }
 
+            _root = tmpArray;
+
+            Length -= x;
         }
 
         public void ClearByIndexXElements(int x, int startPoint)
         {
+            Node tmpNode = _root;
+            Node tmpNodeFirst = _root;
+            Node tmpNodeEnd = _root;
+            for (int i = 0; i < startPoint + x; i++)
+            {
+                tmpNode = tmpNode.Next;
+                if (i==startPoint-1)
+                {
+                    tmpNodeFirst = tmpNode;
+                }
+                else if(i==startPoint+x-1)
+                {
+                    tmpNodeEnd = tmpNode;
+                }
+            }
+            tmpNodeFirst.Next = tmpNodeEnd;
 
-        }
+            if (x+startPoint==Length)
+            {
+                tmpNodeFirst = null;
+                _tail = tmpNodeFirst;
+            }
 
-        public int arrayLength()
-        {
-            return 1;
-        }
-
-        public int FirstIndexByValue(int value)
-        {
-            return 1;
-        }
-
-        public void ChangeValueByIndex(int index, int value)
-        {
-
-        }
-
-        public void Reverse()
-        {
-
-        }
-
-        public int MaxValue()
-        {
-            return 1;
-        }
-
-        public int MinValue()
-        {
-            return 1;
-        }
-
-        public int IndexOfMaxValue()
-        {
-            return 1;
-        }
-
-        public int IndexOfMinValue()
-        {
-            return 1;
-        }
-
-        public void SortAscending()
-        {
-
-        }
-
-        public void SortDescending()
-        {
-
-        }
-
-        public int RemoveByValueFisrt(int value)
-        {
-            return 1;
-        }
-
-        public int RemoveByValueAll(int value)
-        {
-            return 1;
-        }
-
-        public void AddArrayListInEnd(ArrayList insertArray)
-        {
-
-        }
-
-        public void AddArrayListByFirstIndex(ArrayList insertArray)
-        {
-
-        }
-
-        public void AddArrayListByIndex(int index, ArrayList insertArray)
-        {
-
+            Length -= x;
         }
         public override string ToString()
         {
