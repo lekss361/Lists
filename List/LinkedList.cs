@@ -170,6 +170,7 @@ namespace List
             Length -= x;
         }
 
+        //9
         public void ClearByIndexXElements(int x, int startPoint)
         {
             Node tmpNode = _root;
@@ -196,6 +197,146 @@ namespace List
             }
 
             Length -= x-1;
+        }
+
+        //10
+        public int ReturnLength()
+        {
+            return Length;
+        }
+
+        //11
+        public void AccessByIndex()
+        {
+            
+        }
+
+        //14
+        public void Revers()
+        {
+                Node Current = _root;
+                Node tmpNode = new Node(1);
+
+            while (Current.Next != null)
+            {
+                tmpNode = Current.Next;
+                Current.Next = tmpNode.Next;
+                tmpNode.Next = _root;
+                _root = tmpNode;
+            }
+        }
+        //15
+        public int MaxValue()
+        {
+            int maxValue = NodeByIndex(0).Value;
+
+            for (int i = 1; i < Length; i++)
+            {
+                if (maxValue<NodeByIndex(i).Value)
+                {
+                    maxValue = NodeByIndex(i).Value;
+                }
+            }
+
+            return maxValue;
+        }
+
+        public int MinValue()
+        {
+            int minValue = NodeByIndex(0).Value;
+
+            for (int i = 1; i < Length; i++)
+            {
+                if (minValue > NodeByIndex(i).Value)
+                {
+                    minValue = NodeByIndex(i).Value;
+                }
+            }
+
+            return minValue;
+        }
+
+        public int IndexOfMaxValue()
+        {
+            int maxValue = NodeByIndex(0).Value;
+
+            for (int i = 0; i < Length; i++)
+            {
+                if (maxValue > NodeByIndex(i).Value)
+                {
+                    maxValue = i-1;
+                }
+            }
+
+            return maxValue;
+        }
+
+        public int IndexOfMinValue()
+        {
+            int minValue = NodeByIndex(0).Value;
+
+            for (int i = 0; i < Length; i++)
+            {
+                if (minValue < NodeByIndex(i).Value)
+                {
+                    minValue = i-2;
+                }
+            }
+
+            return minValue;
+        }
+
+        public int RemoveByValueFisrt(int value)
+        {
+            int index = -1;
+            Length--;
+            for (int i = 1; i < Length; i++)
+            {
+                if (NodeByIndex(i).Value==value)
+                {
+                    NodeByIndex(i - 1).Next = NodeByIndex(i).Next;
+                    return index;
+                }
+                
+            }
+            return index;
+        }
+
+        public int RemoveByValueAll(int value)
+        {
+            int count = 0;
+            
+            for (int i = 1; i < Length; i++)
+            {
+                if (NodeByIndex(i).Value == value)
+                {
+                    NodeByIndex(i - 1).Next = NodeByIndex(i).Next;
+                    count++;
+                    Length--;
+                }
+
+            }
+
+            return count;
+        }
+
+        public void AddLinkedListInEnd(LinkedList insertLinkedList)
+        {
+            AddLinkedListByIndex(Length, insertLinkedList);
+        }
+
+         public void AddArrayListByZeroIndex(LinkedList insertLinkedList)
+        {
+            AddLinkedListByIndex(0, insertLinkedList);
+        }
+
+        public void AddLinkedListByIndex(int index, LinkedList insertLinkedList)
+        {
+            Length += insertLinkedList.Length;
+            Node tmpNode = NodeByIndex(index);
+            NodeByIndex(index-1).Next =insertLinkedList._root;
+
+            NodeByIndex(index+insertLinkedList.Length-1).Next = tmpNode;
         }
         public override string ToString()
         {
@@ -242,6 +383,16 @@ namespace List
             while (!(currentThis.Next is null));
 
             return true;
+        }
+        private Node NodeByIndex(int index)
+        {
+            Node tmpNode = _root;
+
+            for (int i = 0; i < index; i++)
+            {
+                tmpNode = tmpNode.Next;
+            }
+            return tmpNode;
         }
     }
 }
