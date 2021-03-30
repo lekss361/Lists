@@ -89,116 +89,156 @@ namespace List
 
         public void Add(int value)
         {
+            Node tmpNode = new Node(value);
+
+            if (Length!=0)
+            {
+                NodeByIndex(Length - 1).Next = tmpNode;
+            }
+            else
+            {
+                _root = tmpNode ;
+            }
+
+            _tail = tmpNode;
             Length++;
-            _tail.Next = new Node(value);
-            _tail = _tail.Next;
         }
 
         public void AddByZeroIndex(int value)
         {
+            LinkedList linkedList = new LinkedList(value);
             Node tmpNode = _root;
             _root = new Node(value);
-            _root.Next = tmpNode;
+
+            if (Length!=0)
+            {
+                _root.Next = tmpNode;
+            }
+            else
+            {
+                _tail = _root;
+            }
+
             Length++;
         }
         public void AddByIndex(int index, int value)
         {
-            Node tmpNode = _root;
-            for (int i = 0; i < index; i++)
+            if (index!=0)
             {
-                tmpNode = tmpNode.Next;
+                Node tmpNode = NodeByIndex(index-1);
+                Node insertNode = new Node(value);
+
+                insertNode.Next = tmpNode.Next;
+                tmpNode.Next = insertNode;
+                Length++;
             }
-            Node AdNode = tmpNode;
-            tmpNode.Next = AdNode;
-            tmpNode = new Node(value);
+            else
+            {
+                AddByZeroIndex(value);
+            }
         }
 
         public void RemoveLastElement()
         {
-            Node tmpNode = _root;
-            for (int i = 0; i < Length-2; i++)
+            if (Length==0)
             {
-                tmpNode = tmpNode.Next;
+                throw new ArgumentException("net elementov");
             }
+
+            Node tmpNode = NodeByIndex(Length-2);
+
             tmpNode.Next = null;
             _tail.Next = tmpNode;
-
             Length--;
         }
         public void RemoveFirst()
         {
+            if (Length == 0)
+            {
+                throw new ArgumentException("net elementov");
+            }
+
             _root = _root.Next;
+            Length--;
         }
 
         public void RemoveByIndex(int index)
         {
-            Node tmpAarray = _root;
+            Node tmpNode = NodeByIndex(index-1);
 
-            for (int i = 1; i < index; i++)
+            if (index==0)
             {
-                tmpAarray = tmpAarray.Next;
+                _root = _root.Next;
             }
-
-            tmpAarray.Next = tmpAarray.Next.Next;
+            else if(index==Length-1)
+            {
+               _tail=NodeByIndex(Length - 1).Next = null;
+            }
+            else
+            {
+                tmpNode.Next = tmpNode.Next.Next;
+            }
 
             Length--;
         }
 
         public void RemoveXElementsByEnd(int x)
         {
-            Node tmpArray = _root;
-            for (int i = 0; i < Length-x-1; i++)
+            if ( x > Length)
             {
-                tmpArray = tmpArray.Next;
+                throw new ArgumentException("удаление больше элементов чем в массиве");
             }
-            _tail.Next = tmpArray;
-            tmpArray.Next = null;
 
-            Length -= x;
+            for (int i = 0; i < x; i++)
+            {
+                RemoveLastElement();
+            }
+
+            if (Length==0)
+            {
+                _root = null;
+                _tail = null;
+            }
         }
 
         public void RemoveXElementsByStart(int x)
         {
-            Node tmpArray = _root;
-            for (int i = 0; i < x; i++)
+            if (x > Length)
             {
-                tmpArray = tmpArray.Next;
+                throw new ArgumentException("удаление больше элементов чем в массиве");
             }
 
-            _root = tmpArray;
+            for (int i = 0; i < x; i++)
+            {
+                RemoveFirst();
+            }
 
-            Length -= x;
+            if (Length==0)
+            {
+                _root = null;
+                _tail = null;
+            }
         }
 
         //9
         public void ClearByIndexXElements(int x, int startPoint)
         {
-            Node tmpNode = _root;
-            Node tmpNodeFirst = _root;
-            Node tmpNodeEnd = _root;
-            for (int i = 0; i < startPoint + x; i++)
+            if (startPoint + x > Length)
             {
-                tmpNode = tmpNode.Next;
-                if (i==startPoint-1)
-                {
-                    tmpNodeFirst = tmpNode;
-                }
-                else if(i==startPoint+x-1)
-                {
-                    tmpNodeEnd = tmpNode;
-                }
-            }
-            tmpNodeFirst.Next = tmpNodeEnd;
-
-            if (x+startPoint==Length)
-            {
-                tmpNodeFirst = null;
-                _tail = tmpNodeFirst;
+                throw new ArgumentException("удаление больше элементов чем в массиве");
             }
 
-            Length -= x-1;
+            int tmpLength = Length-x;
+
+            do
+            {
+                int i = startPoint;
+                RemoveByIndex(i);
+            } while (Length != tmpLength);
+             
+            
         }
-
+       
         //10
         public int ReturnLength()
         {
@@ -228,6 +268,11 @@ namespace List
         //15
         public int MaxValue()
         {
+            if (Length==0)
+            {
+                throw new ArgumentNullException("лист не имеет элементов");
+            }
+
             int maxValue = NodeByIndex(0).Value;
 
             for (int i = 1; i < Length; i++)
@@ -243,6 +288,11 @@ namespace List
 
         public int MinValue()
         {
+            if (Length == 0)
+            {
+                throw new ArgumentNullException("лист не имеет элементов");
+            }
+
             int minValue = NodeByIndex(0).Value;
 
             for (int i = 1; i < Length; i++)
@@ -258,6 +308,11 @@ namespace List
 
         public int IndexOfMaxValue()
         {
+            if (Length == 0)
+            {
+                throw new ArgumentNullException("лист не имеет элементов");
+            }
+
             int maxValue = NodeByIndex(0).Value;
 
             for (int i = 0; i < Length; i++)
@@ -273,6 +328,11 @@ namespace List
 
         public int IndexOfMinValue()
         {
+            if (Length == 0)
+            {
+                throw new ArgumentNullException("лист не имеет элементов");
+            }
+
             int minValue = NodeByIndex(0).Value;
 
             for (int i = 0; i < Length; i++)
@@ -286,8 +346,49 @@ namespace List
             return minValue;
         }
 
-        public int RemoveByValueFisrt(int value)
+        public void SortAscending()
         {
+            for (int i = 1; i < Length; i++)
+            {
+                for (int j = 0; j < Length - i; j++)
+                {
+                    int tmp;
+
+                    if (NodeByIndex(j + 1).Value < NodeByIndex(j).Value)
+                    {
+                        tmp = NodeByIndex(j).Value;
+                        NodeByIndex(j).Value = NodeByIndex(j + 1).Value;
+                        NodeByIndex(j + 1).Value = tmp;
+                    }
+                }
+            }
+        } //19
+
+        public void SortDescending()
+        {
+            for (int i = 1; i < Length; i++)
+            {
+                for (int j = 0; j < Length - i; j++)
+                {
+                    int tmp;
+
+                    if (NodeByIndex(j + 1).Value > NodeByIndex(j).Value)
+                    {
+                        tmp = NodeByIndex(j).Value;
+                        NodeByIndex(j).Value = NodeByIndex(j + 1).Value;
+                        NodeByIndex(j + 1).Value = tmp;
+                    }
+                }
+            }
+        }
+
+            public int RemoveByValueFisrt(int value)
+        {
+            if (Length == 0)
+            {
+                throw new ArgumentNullException("лист не имеет элементов");
+            }
+
             int index = -1;
             Length--;
             for (int i = 1; i < Length; i++)
@@ -304,15 +405,29 @@ namespace List
 
         public int RemoveByValueAll(int value)
         {
+            if (Length == 0)
+            {
+                throw new ArgumentNullException("лист не имеет элементов");
+            }
+
             int count = 0;
             
-            for (int i = 1; i < Length; i++)
+            for (int i = 0; i < Length; i++)
             {
                 if (NodeByIndex(i).Value == value)
                 {
-                    NodeByIndex(i - 1).Next = NodeByIndex(i).Next;
+                    if (i==0)
+                    {
+                        _root = _root.Next;
+                    }
+                    else
+                    {
+                        NodeByIndex(i - 1).Next = NodeByIndex(i).Next;
+                    }
+                    
                     count++;
                     Length--;
+                    i--;
                 }
 
             }
@@ -334,9 +449,20 @@ namespace List
         {
             Length += insertLinkedList.Length;
             Node tmpNode = NodeByIndex(index);
+            int[] tmpArray= new int[Length];
             NodeByIndex(index-1).Next =insertLinkedList._root;
 
             NodeByIndex(index+insertLinkedList.Length-1).Next = tmpNode;
+
+            for (int i = 0; i < Length; i++)
+            {
+                tmpArray[i] = NodeByIndex(i).Value;
+            }
+            LinkedList tmpLinkedList = new LinkedList(tmpArray);
+
+            _root = tmpLinkedList._root;
+            _tail = tmpLinkedList._tail;
+
         }
         public override string ToString()
         {
@@ -371,7 +497,7 @@ namespace List
             Node currentThis = this._root;
             Node currentList = list._root;
 
-            do
+            while (!(currentThis is null))
             {
                 if (currentThis.Value != currentList.Value)
                 {
@@ -380,12 +506,15 @@ namespace List
                 currentList = currentList.Next;
                 currentThis = currentThis.Next;
             }
-            while (!(currentThis.Next is null));
 
             return true;
         }
         private Node NodeByIndex(int index)
         {
+            if (index>Length-1)
+            {
+                throw new ArgumentOutOfRangeException("netu indexa");
+            }
             Node tmpNode = _root;
 
             for (int i = 0; i < index; i++)
