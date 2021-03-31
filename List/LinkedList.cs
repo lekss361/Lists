@@ -20,6 +20,9 @@ namespace List
         }
 
         public int Length { get; private set; }
+
+        private Node _root;
+        private Node _tail;
         public int this[int index]
         {
             get
@@ -46,8 +49,6 @@ namespace List
             }
         }
 
-        private Node _root;
-        private Node _tail;
 
         public LinkedList()
         {
