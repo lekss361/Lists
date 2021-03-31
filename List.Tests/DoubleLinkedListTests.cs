@@ -69,5 +69,57 @@ namespace List.Tests
             Assert.AreEqual(expected, actual);
         }
 
+    [TestCase(0,new int[] { 1, 2, 3, 4, 5 }, new int[] { 2, 3, 4, 5 })]
+    [TestCase(2, new int[] { 1, 2, 3, 4, 5 }, new int[] {1, 2, 4, 5 })]
+    [TestCase(4, new int[] { 1, 2, 3, 4, 5 }, new int[] {1, 2, 3, 4 })]
+    public void RemoveByIndexTest(int index,int[] array, int[] expectedArray)
+    {
+      DoubleLinkedList actual = new DoubleLinkedList(array);
+      DoubleLinkedList expected = new DoubleLinkedList(expectedArray);
+
+      actual.RemoveByIndex(index);
+
+      Assert.AreEqual(expected, actual);
     }
+
+    [TestCase(2, new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 2, 3 })]
+    [TestCase(0, new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 2, 3, 4, 5 })]
+    [TestCase(5, new int[] { 1, 2, 3, 4, 5 }, new int[] { })]
+    public void RemoveXElementsByEndTest(int x, int[] array, int[] expectedArray)
+    {
+      DoubleLinkedList actual = new DoubleLinkedList(array);
+      DoubleLinkedList expected = new DoubleLinkedList(expectedArray);
+
+      actual.RemoveXElementsByEnd(x);
+
+      Assert.AreEqual(expected, actual);
+    }
+
+    [TestCase(2, new int[] { 1, 2, 3, 4, 5 }, new int[] { 3, 4, 5 })]
+    [TestCase(0, new int[] { 1, 2, 3, 4, 5 }, new int[] { 1, 2, 3, 4, 5 })]
+    [TestCase(5, new int[] { 1, 2, 3, 4, 5 }, new int[] { })]
+    public void RemoveXElementsByStartTest(int x, int[] array, int[] expectedArray)
+    {
+      DoubleLinkedList actual = new DoubleLinkedList(array);
+      DoubleLinkedList expected = new DoubleLinkedList(expectedArray);
+
+      actual.RemoveXElementsByStart(x);
+
+      Assert.AreEqual(expected, actual);
+    }
+
+    [TestCase(3, 3, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, new int[] { 1, 2,3, 6, 7, 8, 9 })]
+    [TestCase(4, 0, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, new int[] { 5, 6, 7, 8, 9 })]
+    [TestCase(2, 7, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, new int[] { 1, 2, 3, 4, 5,6,7 })]
+    public void ClearByIndexXElementsTest(int x, int index, int[] array, int[] expectedArray)
+    {
+      DoubleLinkedList actual = new DoubleLinkedList(array);
+      DoubleLinkedList expected = new DoubleLinkedList(expectedArray);
+
+      actual.ClearByIndexXElements(x, index);
+
+      Assert.AreEqual(expected, actual);
+    }
+
+  }
 }
